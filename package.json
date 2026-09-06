@@ -1,0 +1,17 @@
+{
+  "name": "blug",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "node scripts/generate.js",
+    "dev": "serve public",
+    "deploy": "npm run generate && sh scripts/deploy.sh"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "marked": "^17.0.1"
+  },
+  "devDependencies": {
+    "serve": "^14.2.6"
+  }
+}

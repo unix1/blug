@@ -1,0 +1,144 @@
+:root {
+  color-scheme: light dark;
+  --text: #1a1a1a;
+  --muted: #555;
+  --border: #ddd;
+  --link: #0645ad;
+  --code-bg: #f0f0ee;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #eee;
+    --muted: #aaa;
+    --border: #444;
+    --link: #8ab4f8;
+    --code-bg: #2a2a2a;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0 auto;
+  max-width: 40rem;
+  padding: 1.5rem 1.25rem 3rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+header,
+footer {
+  font-family: system-ui, sans-serif;
+}
+
+header {
+  margin-bottom: 2rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+footer {
+  margin-top: 3rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+a {
+  color: var(--link);
+}
+
+.site-title {
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text);
+}
+
+h1 {
+  font-size: 1.75rem;
+  line-height: 1.25;
+  margin: 0 0 0.5rem;
+}
+
+article time {
+  display: block;
+  margin-bottom: 1.5rem;
+  color: var(--muted);
+  font-family: system-ui, sans-serif;
+  font-size: 0.875rem;
+}
+
+.post-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.post-list li {
+  display: flex;
+  gap: 1rem;
+  margin: 0.75rem 0;
+}
+
+.post-list time {
+  flex: 0 0 7rem;
+  color: var(--muted);
+  font-family: system-ui, sans-serif;
+  font-size: 0.9rem;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.875em;
+  color: var(--text);
+  background: var(--code-bg);
+  padding: 0.12em 0.35em;
+  border-radius: 0.2em;
+  overflow-wrap: break-word;
+}
+
+pre {
+  margin: 1.25em 0;
+  padding: 0.85em 1em;
+  overflow-x: auto;
+  background: var(--code-bg);
+  border-radius: 0.35em;
+  line-height: 1.45;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.875em;
+  color: var(--text);
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  font-size: 1em;
+  border-radius: 0;
+  overflow-wrap: normal;
+}
+
+blockquote {
+  margin: 1.25em 0;
+  padding: 0.15em 0 0.15em 1em;
+  border-left: 3px solid var(--border);
+  color: var(--muted);
+}
+
+blockquote > :first-child {
+  margin-top: 0;
+}
+
+blockquote > :last-child {
+  margin-bottom: 0;
+}
