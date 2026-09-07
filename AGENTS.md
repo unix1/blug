@@ -18,7 +18,7 @@ Keep this blog generator small. Do not add templating languages, `<base>` tags, 
 
 1. Scan `public/*/` for `index.md`.
 2. Require YAML frontmatter `title` and `date`.
-3. Convert markdown with `marked` and write `public/<slug>/index.html` if that file is missing. Delete it to regenerate.
+3. Convert markdown with `marked` and write `public/<slug>/index.html`. Skip the write when the file is already up to date.
 4. Write `public/index.html` (newest date first), including `LISTING_INTRO` above the post list when set.
 
 Leave media files untouched. Markdown relative links (`./photo.jpg`) must stay relative in the HTML.
@@ -35,7 +35,9 @@ R2 does not serve `index.html` for directory paths. Production needs a Cloudflar
 
 Without the trailing slash in the browser URL, `./photo.jpg` resolves to `/photo.jpg`. Do not "fix" that with `<base href>`.
 
-`npm run deploy` runs generate, then rclone sync of `public/` using R2 credentials from `.env` (flags, not `rclone.conf`). If `CACHE_CONTROL` is set, rclone passes `--header-upload Cache-Control: ...` so R2 stores it as object metadata. Set `CACHE_CONTROL_REUPLOAD=1` once after changing it so unchanged objects are rewritten. HTML and extensionless URLs also need a Cloudflare Cache Rule with Eligible for cache; otherwise they stay `DYNAMIC` and every request hits R2. Do not wrap rclone in Node.
+`npm run deploy` runs generate, then rclone sync of `public/` using R2 credentials from `.env` (flags, not `rclone.conf`). If `CACHE_CONTROL` is set, rclone passes `--header-upload Cache-Control: ...` so R2 stores it as object metadata. Set `CACHE_CONTROL_REUPLOAD=1` once after changing it so unchanged objects are rewritten. A Cloudflare Cache Rule with Eligible for cache is optional but recommended so HTML and extensionless URLs are not `DYNAMIC` (every request hitting R2). Do not wrap rclone in Node.
+
+Setup steps for domain, rewrite, cache, R2 custom domain, API tokens, and `.env`: [SETUP.md](SETUP.md).
 
 ## Preview
 
