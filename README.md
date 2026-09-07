@@ -2,6 +2,8 @@
 
 A static blog generator. Posts are markdown folders under `public/`. `scripts/generate.js` turns them into HTML.
 
+See [SETUP.md](SETUP.md) for local preview and Cloudflare R2 hosting.
+
 ## Layout
 
 ```
@@ -48,11 +50,10 @@ npm run deploy     # generate, then rclone sync public/ to destination
 
 This supports S3-compatible hosting, such as Cloudflare R2. Put `S3_*` values in `.env` (see `.env.example`). `npm run deploy` passes those to rclone; no `rclone.conf` is needed. Set `CACHE_CONTROL` in `.env` to control Cache-Control on uploaded objects.
 
-R2 serves exact object keys. It does not map `/hello-world/` to `hello-world/index.html`. Add one **URL Rewrite** on the domain (Rules → Overview → URL Rewrite Rule):
+R2 serves exact object keys. It does not map `/hello-world/` to `hello-world/index.html`. Production needs a URL rewrite so paths ending in `/` fetch `index.html`, plus a cache-everything rule so HTML is eligible for cache. Post listing links include a trailing slash (`hello-world/`) so relative media links resolve.
 
-- If URI Path ends with `/`
-- Rewrite path dynamically to `concat(http.request.uri.path, "index.html")`
+Full dashboard steps: [SETUP.md](SETUP.md).
 
-That also covers `/` → `/index.html`.
+## License
 
-Post links on the listing include a trailing slash (`hello-world/`) so the browser treats the page as a directory and relative media links resolve. The rewrite is internal: the address bar stays `/hello-world/`.
+[MIT](LICENSE)

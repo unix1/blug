@@ -37,6 +37,8 @@ Without the trailing slash in the browser URL, `./photo.jpg` resolves to `/photo
 
 `npm run deploy` runs generate, then rclone sync of `public/` using R2 credentials from `.env` (flags, not `rclone.conf`). If `CACHE_CONTROL` is set, rclone passes `--header-upload Cache-Control: ...` so R2 stores it as object metadata. Set `CACHE_CONTROL_REUPLOAD=1` once after changing it so unchanged objects are rewritten. HTML and extensionless URLs also need a Cloudflare Cache Rule with Eligible for cache; otherwise they stay `DYNAMIC` and every request hits R2. Do not wrap rclone in Node.
 
+Dashboard steps for domain, rewrite, cache, R2 custom domain, API tokens, and `.env`: [SETUP.md](SETUP.md).
+
 ## Preview
 
 `npm run dev` is `serve public`. Do not replace it with a hand-rolled server.

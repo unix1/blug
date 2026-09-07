@@ -1,6 +1,7 @@
 {
   "name": "blug",
   "private": true,
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "generate": "node scripts/generate.js",
