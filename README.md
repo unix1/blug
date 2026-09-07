@@ -6,9 +6,9 @@ A static blog generator. Posts are markdown folders under `public/`. `scripts/ge
 
 ```
 .env                 # S3 credentials for rclone (not committed)
-templates/           # header.html, footer.html
+templates/           # header.html, footer.html, listing.html
 scripts/generate.js
-scripts/config.js    # header, footer, and listing heading
+scripts/config.js    # header, footer, listing heading, optional home intro
 public/
   index.html         # generated listing
   assets/style.css
@@ -33,7 +33,7 @@ Text. Media next to this file: [photo](./photo.jpg).
 
 `title` and `date` are required. Keep media in the same directory and use relative links.
 
-Edit `scripts/config.js` for the site title, footer, and listing heading.
+Edit `scripts/config.js` for the site title, footer, listing heading, and optional home-page intro (`LISTING_INTRO`, markdown shown above the post list). Leave `LISTING_INTRO` empty to omit it.
 
 ## Commands
 
