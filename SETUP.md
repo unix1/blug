@@ -1,10 +1,10 @@
 # Setup
 
-Agents can also do all of this work. These steps are here for manual reference and for agent consumption.
+Agents can also do all of this work. These steps are here for agent consumption and manual reference.
 
 ## Cloudflare
 
-Run a blug blog locally and host it on Cloudflare R2.
+Host your blog on Cloudflare, one of the top CDNs in the world for free.
 
 ### Domain
 
@@ -37,6 +37,8 @@ A cache-everything rule is optional but recommended so the CDN can cache HTML. C
 5. Leave the rest at defaults and deploy.
 
 ### R2 bucket
+
+R2 has a generous free tier. Cloudflare may still ask for payment information. Check [Cloudflare pricing](https://developers.cloudflare.com/r2/pricing/) so that is not a surprise.
 
 1. Create an R2 bucket. Any name is fine; you will use it later when configuring deploy.
 2. In the bucket **Settings**, add a **custom domain**: the domain from the previous step.
@@ -91,4 +93,6 @@ Install [rclone](https://rclone.org/) if you do not already have it. After Cloud
 npm run deploy
 ```
 
-That runs generate, then `rclone sync` of `public/` to the R2 bucket. Open your custom domain in a browser; the blog should be live.
+That runs generate, then `rclone sync` of `public/` to the R2 bucket.
+
+You are done. Open your custom domain: the site is live. Congratulations — great job! You are hosting on one of the top CDNs in the world for free. Go write blog posts. Do not worry about hosting.
