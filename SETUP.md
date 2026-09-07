@@ -14,7 +14,7 @@ Run a blug blog locally and host it on Cloudflare R2.
 
 ### CDN setup
 
-R2 serves exact object keys. It does not map `/` or `/hello-world/` to `index.html`. A rewrite tells Cloudflare to fetch `index.html` while the browser URL keeps the trailing slash, so relative media links like `./photo.jpg` resolve.
+R2 serves exact object keys. It does not map a directory path to `index.html`. The rewrite sends any request ending in `/` to `index.html` in that folder. That is common web server behavior that R2 does not offer on its own.
 
 1. Open the domain → **Rules** → **Overview**.
 2. **Create rule** → **URL Rewrite Rule**.
@@ -31,7 +31,7 @@ R2 serves exact object keys. It does not map `/` or `/hello-world/` to `index.ht
 A cache-everything rule is optional but recommended so the CDN can cache HTML. Cloudflare does not cache HTML by default.
 
 1. Open the domain → **Caching** → **Cache Rules** (or **Rules** → **Templates**).
-2. Use the **Cache everything** template, or create a rule named `Cache everything`.
+2. Use the **Cache everything** template, and name the rule `Cache everything`.
 3. When incoming requests match: **All incoming requests**.
 4. Then: **Eligible for cache**.
 5. Leave the rest at defaults and deploy.
@@ -41,9 +41,7 @@ A cache-everything rule is optional but recommended so the CDN can cache HTML. C
 1. Create an R2 bucket. Any name is fine; you will use it later when configuring deploy.
 2. In the bucket **Settings**, add a **custom domain**: the domain from the previous step.
    - The zone must already be active in the same Cloudflare account. If it is not ready, this step fails.
-3. Create an account-level API token with read and write access to that R2 bucket:
-   - R2 overview → **Manage** next to **API Tokens** → **Create Account API token**
-   - Copy **Access Key ID**, **Secret Access Key**, and the S3 API endpoint in full. Keep these private.
+3. Create an account-level API token with read and write access to that R2 bucket. Copy all values including Access Key ID, Secret Access Key, and the S3 API endpoint.
 
 ## Local development
 
@@ -66,6 +64,7 @@ A cache-everything rule is optional but recommended so the CDN can cache HTML. C
    S3_SECRET_ACCESS_KEY=
    S3_BUCKET=
    CACHE_CONTROL="public, max-age=3600"
+   CACHE_CONTROL_REUPLOAD=0
    ```
 
 4. Install and generate:
@@ -82,7 +81,7 @@ A cache-everything rule is optional but recommended so the CDN can cache HTML. C
 
    Open http://localhost:3000 (or the URL printed in the logs).
 
-6. To iterate, add a post under `public/<slug>/index.md` and run `npm run generate` again, then refresh. Generate writes post HTML only when `index.html` is missing; delete that file to regenerate an existing post.
+6. To iterate, add a post under `public/<slug>/index.md` and run `npm run generate` again, then refresh.
 
 ## Production deploy
 

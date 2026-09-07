@@ -18,7 +18,7 @@ Keep this blog generator small. Do not add templating languages, `<base>` tags, 
 
 1. Scan `public/*/` for `index.md`.
 2. Require YAML frontmatter `title` and `date`.
-3. Convert markdown with `marked` and write `public/<slug>/index.html` if that file is missing. Delete it to regenerate.
+3. Convert markdown with `marked` and write `public/<slug>/index.html`. Skip the write when the file is already up to date.
 4. Write `public/index.html` (newest date first), including `LISTING_INTRO` above the post list when set.
 
 Leave media files untouched. Markdown relative links (`./photo.jpg`) must stay relative in the HTML.
