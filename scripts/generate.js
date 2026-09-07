@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import matter from "gray-matter";
 import { marked } from "marked";
-import { LISTING_HEADING, SITE_FOOTER, SITE_HEADER } from "./config.js";
+import { LISTING_HEADING, LISTING_INTRO, SITE_FOOTER, SITE_HEADER } from "./config.js";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PUBLIC = path.join(ROOT, "public");
@@ -94,6 +94,14 @@ ${body}
   return writeFile(path.join(PUBLIC, post.slug, "index.html"), html);
 }
 
+function renderListingIntro() {
+  const markdown = LISTING_INTRO.trim();
+  if (!markdown) {
+    return "";
+  }
+  return `<section class="listing-intro">\n${marked.parse(markdown)}</section>\n`;
+}
+
 function writeListing(posts) {
   const items = posts
     .map(
@@ -102,14 +110,12 @@ function writeListing(posts) {
     )
     .join("\n");
 
-  const html = renderPage(
-    SITE_HEADER,
-    `<h1>${escapeHtml(LISTING_HEADING)}</h1>
-<ul class="post-list">
-${items}
-</ul>
-`,
-  );
+  const listing = loadTemplate("listing.html")
+    .replaceAll("{{listing_intro}}", renderListingIntro())
+    .replaceAll("{{listing_heading}}", escapeHtml(LISTING_HEADING))
+    .replaceAll("{{posts}}", items);
+
+  const html = renderPage(SITE_HEADER, listing);
   return writeFile(path.join(PUBLIC, "index.html"), html);
 }
 
@@ -134,14 +140,10 @@ for (const post of posts) {
 }
 console.log(`Generated: ${generated} post${generated === 1 ? "" : "s"}`);
 console.log(`Skipped generation: ${skipped} post${skipped === 1 ? "" : "s"}`);
-if (generated > 0 || !fs.existsSync(path.join(PUBLIC, "index.html"))) {
-  const wrote = writeListing(posts);
-  if (wrote) {
-    console.log("Wrote index listing");
-  } else {
-    console.log("Skipping index listing write, already up to date");
-  }
+const wroteListing = writeListing(posts);
+if (wroteListing) {
+  console.log("Wrote index listing");
 } else {
-  console.log("Skipping index listing write, no posts were generated");
+  console.log("Skipping index listing write, already up to date");
 }
 console.log(`Total: ${posts.length} post${posts.length === 1 ? "" : "s"}`);

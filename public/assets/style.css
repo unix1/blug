@@ -74,6 +74,18 @@ article time {
   font-size: 0.875rem;
 }
 
+.listing-intro {
+  margin-bottom: 2rem;
+}
+
+.listing-intro > :first-child {
+  margin-top: 0;
+}
+
+.listing-intro > :last-child {
+  margin-bottom: 0;
+}
+
 .post-list {
   list-style: none;
   padding: 0;
