@@ -10,7 +10,7 @@ Keep this blog generator small. Do not add templating languages, `<base>` tags, 
 - `templates/header.html` and `templates/footer.html` wrap every page. Placeholders are `{{title}}`, `{{site_header}}`, and `{{site_footer}}`.
 - `templates/listing.html` is the home page body. Placeholders are `{{listing_intro}}`, `{{listing_heading}}`, and `{{posts}}`. `LISTING_INTRO` is markdown; empty string omits the intro.
 - `scripts/generate.js` is the only build step. It reads `scripts/config.js`.
-- `.env` holds S3 provider, region, endpoint, access keys, and bucket. Generate does not read it. Deploy does (`scripts/deploy.sh`).
+- `.env` holds S3 provider, region, endpoint, access keys, bucket, and optional `CACHE_CONTROL`. Generate does not read it. Deploy does (`scripts/deploy.sh`).
 
 ## Generate
 
@@ -35,7 +35,7 @@ R2 does not serve `index.html` for directory paths. Production needs a Cloudflar
 
 Without the trailing slash in the browser URL, `./photo.jpg` resolves to `/photo.jpg`. Do not "fix" that with `<base href>`.
 
-`npm run deploy` runs generate, then rclone sync of `public/` using R2 credentials from `.env` (flags, not `rclone.conf`). Do not wrap rclone in Node.
+`npm run deploy` runs generate, then rclone sync of `public/` using R2 credentials from `.env` (flags, not `rclone.conf`). If `CACHE_CONTROL` is set, rclone passes `--header-upload Cache-Control: ...` so R2 stores it as object metadata. Set `CACHE_CONTROL_REUPLOAD=1` once after changing it so unchanged objects are rewritten. HTML and extensionless URLs also need a Cloudflare Cache Rule with Eligible for cache; otherwise they stay `DYNAMIC` and every request hits R2. Do not wrap rclone in Node.
 
 ## Preview
 

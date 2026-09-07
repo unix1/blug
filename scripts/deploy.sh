@@ -11,6 +11,14 @@ if [ -z "$S3_PROVIDER" ] || [ -z "$S3_REGION" ] || [ -z "$S3_ENDPOINT" ] || [ -z
   exit 1
 fi
 
+set --
+if [ -n "${CACHE_CONTROL:-}" ]; then
+  set -- "$@" --header-upload "Cache-Control: $CACHE_CONTROL"
+fi
+if [ "${CACHE_CONTROL_REUPLOAD:-}" = "1" ]; then
+  set -- "$@" --ignore-times
+fi
+
 rclone sync public/ ":s3:${S3_BUCKET}" \
   --config /dev/null \
   --s3-provider "$S3_PROVIDER" \
@@ -18,4 +26,5 @@ rclone sync public/ ":s3:${S3_BUCKET}" \
   --s3-endpoint "$S3_ENDPOINT" \
   --s3-access-key-id "$S3_ACCESS_KEY_ID" \
   --s3-secret-access-key "$S3_SECRET_ACCESS_KEY" \
+  "$@" \
   -v
