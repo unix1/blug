@@ -35,9 +35,9 @@ R2 does not serve `index.html` for directory paths. Production needs a Cloudflar
 
 Without the trailing slash in the browser URL, `./photo.jpg` resolves to `/photo.jpg`. Do not "fix" that with `<base href>`.
 
-`npm run deploy` runs generate, then rclone sync of `public/` using R2 credentials from `.env` (flags, not `rclone.conf`). If `CACHE_CONTROL` is set, rclone passes `--header-upload Cache-Control: ...` so R2 stores it as object metadata. Set `CACHE_CONTROL_REUPLOAD=1` once after changing it so unchanged objects are rewritten. HTML and extensionless URLs also need a Cloudflare Cache Rule with Eligible for cache; otherwise they stay `DYNAMIC` and every request hits R2. Do not wrap rclone in Node.
+`npm run deploy` runs generate, then rclone sync of `public/` using R2 credentials from `.env` (flags, not `rclone.conf`). If `CACHE_CONTROL` is set, rclone passes `--header-upload Cache-Control: ...` so R2 stores it as object metadata. Set `CACHE_CONTROL_REUPLOAD=1` once after changing it so unchanged objects are rewritten. A Cloudflare Cache Rule with Eligible for cache is optional but recommended so HTML and extensionless URLs are not `DYNAMIC` (every request hitting R2). Do not wrap rclone in Node.
 
-Dashboard steps for domain, rewrite, cache, R2 custom domain, API tokens, and `.env`: [SETUP.md](SETUP.md).
+Setup steps for domain, rewrite, cache, R2 custom domain, API tokens, and `.env`: [SETUP.md](SETUP.md).
 
 ## Preview
 

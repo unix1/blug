@@ -42,7 +42,7 @@ Edit `scripts/config.js` for the site title, footer, listing heading, and option
 ```bash
 npm install
 npm run generate   # write listing and post HTML
-npm run dev        # serve public/ at http://127.0.0.1:3000
+npm run dev        # serve public/ at http://localhost:3000
 npm run deploy     # generate, then rclone sync public/ to destination
 ```
 
@@ -50,9 +50,9 @@ npm run deploy     # generate, then rclone sync public/ to destination
 
 This supports S3-compatible hosting, such as Cloudflare R2. Put `S3_*` values in `.env` (see `.env.example`). `npm run deploy` passes those to rclone; no `rclone.conf` is needed. Set `CACHE_CONTROL` in `.env` to control Cache-Control on uploaded objects.
 
-R2 serves exact object keys. It does not map `/hello-world/` to `hello-world/index.html`. Production needs a URL rewrite so paths ending in `/` fetch `index.html`, plus a cache-everything rule so HTML is eligible for cache. Post listing links include a trailing slash (`hello-world/`) so relative media links resolve.
+R2 serves exact object keys. It does not map `/hello-world/` to `hello-world/index.html`. Production needs a URL rewrite so paths ending in `/` fetch `index.html`. A cache-everything rule is optional but recommended so the CDN can cache HTML. Post listing links include a trailing slash (`hello-world/`) so relative media links resolve.
 
-Full dashboard steps: [SETUP.md](SETUP.md).
+Full steps: [SETUP.md](SETUP.md).
 
 ## License
 
