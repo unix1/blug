@@ -46,11 +46,7 @@ npm run deploy     # generate, then rclone sync public/ to destination
 
 ## Hosting
 
-This supports S3-compatible hosting, such as Cloudflare R2. Put `S3_*` values in `.env` (see `.env.example`). `npm run deploy` passes those to rclone; no `rclone.conf` is needed.
-
-R2 does not send `Cache-Control` unless it is stored on the object. Set `CACHE_CONTROL` in `.env` (quote the value); deploy passes it to rclone as `--header-upload`, and Cloudflare Cache uses that header for edge TTL. rclone only writes the header when it uploads, so after changing `CACHE_CONTROL` set `CACHE_CONTROL_REUPLOAD=1` once to rewrite existing objects.
-
-HTML and directory URLs (`/`, `/hello-world/`) are not in Cloudflare's default cached extensions. Add a **Cache Rule** (Rules → Cache Rules) with Cache eligibility = Eligible for cache. Without it, pages stay `DYNAMIC` and every request hits R2 even when objects have `Cache-Control`.
+This supports S3-compatible hosting, such as Cloudflare R2. Put `S3_*` values in `.env` (see `.env.example`). `npm run deploy` passes those to rclone; no `rclone.conf` is needed. Set `CACHE_CONTROL` in `.env` to control Cache-Control on uploaded objects.
 
 R2 serves exact object keys. It does not map `/hello-world/` to `hello-world/index.html`. Add one **URL Rewrite** on the domain (Rules → Overview → URL Rewrite Rule):
 
