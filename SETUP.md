@@ -14,7 +14,11 @@ Host your blog on Cloudflare, one of the top CDNs in the world for free.
 
 ### CDN setup
 
-R2 serves exact object keys. It does not map a directory path to `index.html`. The rewrite sends any request ending in `/` to `index.html` in that folder. That is common web server behavior that R2 does not offer on its own.
+We will set up two CDN rules.
+
+#### Rule 1: rewrite all `*/` requests to `*/index.html`
+
+> ℹ️ Why? R2 serves exact object keys. It does not map a directory path to `index.html`. The rewrite sends any request ending in `/` to `index.html` in that folder. That is common web server behavior that R2 does not offer on its own.
 
 1. Open the domain → **Rules** → **Overview**.
 2. **Create rule** → **URL Rewrite Rule**.
@@ -28,7 +32,9 @@ R2 serves exact object keys. It does not map a directory path to `index.html`. T
    - Query: **Preserve**
 6. Deploy the rule.
 
-A cache-everything rule is optional but recommended so the CDN can cache HTML. Cloudflare does not cache HTML by default.
+#### Rule 2: make all objects eligible for cache
+
+> ℹ️ Why? A cache-everything rule is optional but recommended so the CDN can cache HTML. Cloudflare does not cache HTML by default.
 
 1. Open the domain → **Caching** → **Cache Rules** (or **Rules** → **Templates**).
 2. Use the **Cache everything** template, and name the rule `Cache everything`.
@@ -38,7 +44,7 @@ A cache-everything rule is optional but recommended so the CDN can cache HTML. C
 
 ### R2 bucket
 
-R2 has a generous free tier. Cloudflare may still ask for payment information. Check [Cloudflare pricing](https://developers.cloudflare.com/r2/pricing/) so that is not a surprise.
+> ℹ️ R2 has a generous free tier. Cloudflare may still ask for payment information. Check [Cloudflare pricing](https://developers.cloudflare.com/r2/pricing/) so that is not a surprise.
 
 1. Create an R2 bucket. Any name is fine; you will use it later when configuring deploy.
 2. In the bucket **Settings**, add a **custom domain**: the domain from the previous step.
@@ -48,8 +54,8 @@ R2 has a generous free tier. Cloudflare may still ask for payment information. C
 ## Local development
 
 1. On [github.com/unix1/blug](https://github.com/unix1/blug), click **Use this template** and create a repository of your own.
-   - Without GitHub, copy the files from the `main` branch wherever you like.
-2. Clone that repository:
+   - Note: `git` is not required. If you'd rather not use it, copy the files from the `main` branch wherever you like. You can download the [latest blug zip archive](https://github.com/unix1/blug/archive/refs/heads/main.zip) from GitHub and unzip in your preferred location.
+2. If you are using `git` for convenience, clone your newly created repository (if not, you can skip this step):
 
    ```bash
    git clone <your-repo-url>
@@ -65,9 +71,11 @@ R2 has a generous free tier. Cloudflare may still ask for payment information. C
    S3_ACCESS_KEY_ID=
    S3_SECRET_ACCESS_KEY=
    S3_BUCKET=
-   CACHE_CONTROL="public, max-age=3600"
+   CACHE_CONTROL="public, max-age=5"
    CACHE_CONTROL_REUPLOAD=0
    ```
+
+   > ℹ️ Note: `max-age=5` above will only cache your objects for 5 seconds in the CDN. This value should be OK to get started while you are iterating on your site. Once you are set up, you may want to change this to a larger value. See the [CDN Cache Control](https://blug.blog/cdn-cache-control/) blog post for more details.
 
 4. Install and generate:
 
