@@ -16,7 +16,7 @@ Host your blog on Cloudflare, one of the top CDNs in the world for free.
 
 We will set up two CDN rules.
 
-#### Rule 1: redirect all */ requests to */index.html
+#### Rule 1: rewrite all `*/` requests to `*/index.html`
 
 > ℹ️ Why? R2 serves exact object keys. It does not map a directory path to `index.html`. The rewrite sends any request ending in `/` to `index.html` in that folder. That is common web server behavior that R2 does not offer on its own.
 
