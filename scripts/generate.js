@@ -45,8 +45,9 @@ function formatDate(date) {
   return date.toISOString().slice(0, 10);
 }
 
-function findPosts() {
+function findEntries() {
   const posts = [];
+  const pages = [];
 
   for (const entry of fs.readdirSync(PUBLIC, { withFileTypes: true })) {
     if (!entry.isDirectory() || SKIP_DIRS.has(entry.name)) {
@@ -64,6 +65,16 @@ function findPosts() {
     if (!data.title) {
       throw new Error(`${entry.name}/index.md is missing a title`);
     }
+
+    if (data.type === "page") {
+      pages.push({
+        slug: entry.name,
+        title: String(data.title),
+        content,
+      });
+      continue;
+    }
+
     if (!data.date) {
       throw new Error(`${entry.name}/index.md is missing a date`);
     }
@@ -77,7 +88,7 @@ function findPosts() {
   }
 
   posts.sort((a, b) => b.date - a.date);
-  return posts;
+  return { posts, pages };
 }
 
 function writePost(post) {
@@ -92,6 +103,19 @@ ${body}
 `,
   );
   return writeFile(path.join(PUBLIC, post.slug, "index.html"), html);
+}
+
+function writeStaticPage(page) {
+  const body = marked.parse(page.content);
+  const html = renderPage(
+    page.title,
+    `<article>
+<h1>${escapeHtml(page.title)}</h1>
+${body}
+</article>
+`,
+  );
+  return writeFile(path.join(PUBLIC, page.slug, "index.html"), html);
 }
 
 function renderListingIntro() {
@@ -127,23 +151,35 @@ function writeFile(path, content) {
   return true;
 }
 
-const posts = findPosts();
-let skipped = 0;
-let generated = 0;
-for (const post of posts) {
-  const wrote = writePost(post);
-  if (!wrote) {
-    skipped++;
-    continue;
-  }
-  generated++;
+function countLabel(n, singular) {
+  return `${n} ${singular}${n === 1 ? "" : "s"}`;
 }
-console.log(`Generated: ${generated} post${generated === 1 ? "" : "s"}`);
-console.log(`Skipped generation: ${skipped} post${skipped === 1 ? "" : "s"}`);
+
+const { posts, pages } = findEntries();
+let skippedPosts = 0;
+let generatedPosts = 0;
+for (const post of posts) {
+  if (writePost(post)) {
+    generatedPosts++;
+  } else {
+    skippedPosts++;
+  }
+}
+let skippedPages = 0;
+let generatedPages = 0;
+for (const page of pages) {
+  if (writeStaticPage(page)) {
+    generatedPages++;
+  } else {
+    skippedPages++;
+  }
+}
+console.log(`Generated: ${countLabel(generatedPosts, "post")}, ${countLabel(generatedPages, "page")}`);
+console.log(`Skipped generation: ${countLabel(skippedPosts, "post")}, ${countLabel(skippedPages, "page")}`);
 const wroteListing = writeListing(posts);
 if (wroteListing) {
   console.log("Wrote index listing");
 } else {
   console.log("Skipping index listing write, already up to date");
 }
-console.log(`Total: ${posts.length} post${posts.length === 1 ? "" : "s"}`);
+console.log(`Total: ${countLabel(posts.length, "post")}, ${countLabel(pages.length, "page")}`);

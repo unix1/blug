@@ -35,13 +35,30 @@ Text. Media next to this file: [photo](./photo.jpg).
 
 `title` and `date` are required. Keep media in the same directory and use relative links.
 
+## Write a page
+
+Pages use the same folder layout as posts, but with `type: page` and no date. They are not listed on the home page.
+
+Create `public/<slug>/index.md`:
+
+```markdown
+---
+title: Privacy Policy
+type: page
+---
+
+Your content here.
+```
+
+`title` and `type: page` are required. Link to pages the same way as posts (`/privacy-policy/`).
+
 Edit `scripts/config.js` for the site title, footer, listing heading, and optional home-page intro (`LISTING_INTRO`, markdown shown above the post list). Leave `LISTING_INTRO` empty to omit it.
 
 ## Commands
 
 ```bash
 npm install
-npm run generate   # write listing and post HTML
+npm run generate   # write listing, post, and page HTML
 npm run dev        # serve public/ at http://localhost:3000
 npm run deploy     # generate, then rclone sync public/ to destination
 ```
