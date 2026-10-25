@@ -10,7 +10,7 @@ See [SETUP.md](SETUP.md) for local preview and Cloudflare R2 hosting.
 .env                 # S3 credentials for rclone (not committed)
 templates/           # header.html, footer.html, listing.html
 scripts/generate.js
-scripts/config.js    # header, footer, listing heading, optional home intro
+scripts/config.js    # header, listing title, subtitle, description, footer, listing heading, optional home intro
 public/
   index.html         # generated listing
   assets/style.css
@@ -52,7 +52,7 @@ Your content here.
 
 `title` and `type: page` are required. Link to pages the same way as posts (`/privacy-policy/`).
 
-Edit `scripts/config.js` for the site title, footer, listing heading, and optional home-page intro (`LISTING_INTRO`, markdown shown above the post list). Leave `LISTING_INTRO` empty to omit it.
+Edit `scripts/config.js` for the site header, listing page title (`SITE_TITLE`), post/page title suffix (`SITE_SUBTITLE`), meta description (`SITE_DESCRIPTION`), footer, listing heading, and optional home-page intro (`LISTING_INTRO`, markdown shown above the post list). Posts and pages use `<title> - SITE_SUBTITLE` as the document title. Leave `LISTING_INTRO` empty to omit it.
 
 ## Commands
 
