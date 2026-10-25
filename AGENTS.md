@@ -7,8 +7,8 @@ Keep this blog generator small. Do not add templating languages, `<base>` tags, 
 - `public/` is the site root and the rclone/R2 upload tree.
 - Posts and pages are one level deep: `public/<slug>/index.md` plus any media. Skip `public/assets/`.
 - Pages use frontmatter `type: page` (no `date`). They share the same slug/URL layout as posts but are excluded from the home listing and render without a `<time>`.
-- `scripts/config.js` holds `SITE_HEADER`, `SITE_FOOTER`, `LISTING_HEADING`, and `LISTING_INTRO`.
-- `templates/header.html` and `templates/footer.html` wrap every page. Placeholders are `{{title}}`, `{{site_header}}`, and `{{site_footer}}`.
+- `scripts/config.js` holds `SITE_HEADER`, `SITE_TITLE`, `SITE_SUBTITLE`, `SITE_DESCRIPTION`, `SITE_FOOTER`, `LISTING_HEADING`, and `LISTING_INTRO`.
+- `templates/header.html` and `templates/footer.html` wrap every page. Placeholders are `{{title}}`, `{{meta_description}}`, `{{site_header}}`, and `{{site_footer}}`.
 - `templates/listing.html` is the home page body. Placeholders are `{{listing_intro}}`, `{{listing_heading}}`, and `{{posts}}`. `LISTING_INTRO` is markdown; empty string omits the intro.
 - `scripts/generate.js` is the only build step. It reads `scripts/config.js`.
 - `.env` holds S3 provider, region, endpoint, access keys, bucket, and optional `CACHE_CONTROL`. Generate does not read it. Deploy does (`scripts/deploy.sh`).
@@ -19,8 +19,8 @@ Keep this blog generator small. Do not add templating languages, `<base>` tags, 
 
 1. Scan `public/*/` for `index.md`.
 2. If `type: page`, require YAML frontmatter `title` only. Otherwise require `title` and `date`.
-3. Convert markdown with `marked` and write `public/<slug>/index.html`. Posts include a `<time>`; pages do not. Skip the write when the file is already up to date.
-4. Write `public/index.html` from posts only (newest date first), including `LISTING_INTRO` above the post list when set.
+3. Convert markdown with `marked` and write `public/<slug>/index.html`. Posts include a `<time>`; pages do not. Document titles are `<entry title> - SITE_SUBTITLE`. Skip the write when the file is already up to date.
+4. Write `public/index.html` from posts only (newest date first), using `SITE_TITLE` as the document title, including `LISTING_INTRO` above the post list when set. Empty `SITE_DESCRIPTION` omits the meta description tag.
 
 Leave media files untouched. Markdown relative links (`./photo.jpg`) must stay relative in the HTML.
 

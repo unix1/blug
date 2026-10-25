@@ -3,7 +3,15 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import matter from "gray-matter";
 import { marked } from "marked";
-import { LISTING_HEADING, LISTING_INTRO, SITE_FOOTER, SITE_HEADER } from "./config.js";
+import {
+  LISTING_HEADING,
+  LISTING_INTRO,
+  SITE_DESCRIPTION,
+  SITE_FOOTER,
+  SITE_HEADER,
+  SITE_SUBTITLE,
+  SITE_TITLE,
+} from "./config.js";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PUBLIC = path.join(ROOT, "public");
@@ -22,9 +30,19 @@ function loadTemplate(name) {
   return fs.readFileSync(path.join(TEMPLATES, name), "utf8");
 }
 
+function documentTitle(entryTitle) {
+  return `${entryTitle} - ${SITE_SUBTITLE}`;
+}
+
+function metaDescription() {
+  const description = SITE_DESCRIPTION.trim();
+  return description ? `  <meta name="description" content="${escapeHtml(description)}">\n` : "";
+}
+
 function renderPage(title, content) {
   const header = loadTemplate("header.html")
     .replaceAll("{{title}}", escapeHtml(title))
+    .replaceAll("{{meta_description}}", metaDescription())
     .replaceAll("{{site_header}}", escapeHtml(SITE_HEADER));
   const footer = loadTemplate("footer.html").replaceAll("{{site_footer}}", escapeHtml(SITE_FOOTER));
   return header + content + footer;
@@ -94,7 +112,7 @@ function findEntries() {
 function writePost(post) {
   const body = marked.parse(post.content);
   const html = renderPage(
-    post.title,
+    documentTitle(post.title),
     `<article>
 <h1>${escapeHtml(post.title)}</h1>
 <time datetime="${formatDate(post.date)}">${formatDate(post.date)}</time>
@@ -108,7 +126,7 @@ ${body}
 function writeStaticPage(page) {
   const body = marked.parse(page.content);
   const html = renderPage(
-    page.title,
+    documentTitle(page.title),
     `<article>
 <h1>${escapeHtml(page.title)}</h1>
 ${body}
@@ -139,7 +157,7 @@ function writeListing(posts) {
     .replaceAll("{{listing_heading}}", escapeHtml(LISTING_HEADING))
     .replaceAll("{{posts}}", items);
 
-  const html = renderPage(SITE_HEADER, listing);
+  const html = renderPage(SITE_TITLE, listing);
   return writeFile(path.join(PUBLIC, "index.html"), html);
 }
 
