@@ -34,15 +34,10 @@ function documentTitle(entryTitle) {
   return `${entryTitle} - ${SITE_SUBTITLE}`;
 }
 
-function metaDescription() {
-  const description = SITE_DESCRIPTION.trim();
-  return description ? `  <meta name="description" content="${escapeHtml(description)}">\n` : "";
-}
-
 function renderPage(title, content) {
   const header = loadTemplate("header.html")
     .replaceAll("{{title}}", escapeHtml(title))
-    .replaceAll("{{meta_description}}", metaDescription())
+    .replaceAll("{{description}}", escapeHtml(SITE_DESCRIPTION))
     .replaceAll("{{site_header}}", escapeHtml(SITE_HEADER));
   const footer = loadTemplate("footer.html").replaceAll("{{site_footer}}", escapeHtml(SITE_FOOTER));
   return header + content + footer;

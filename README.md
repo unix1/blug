@@ -52,7 +52,7 @@ Your content here.
 
 `title` and `type: page` are required. Link to pages the same way as posts (`/privacy-policy/`).
 
-Edit `scripts/config.js` for the site header, listing page title (`SITE_TITLE`), post/page title suffix (`SITE_SUBTITLE`), meta description (`SITE_DESCRIPTION`), footer, listing heading, and optional home-page intro (`LISTING_INTRO`, markdown shown above the post list). Posts and pages use `<title> - SITE_SUBTITLE` as the document title. Leave `SITE_DESCRIPTION` or `LISTING_INTRO` empty to omit them.
+Edit `scripts/config.js` for the site header, listing page title (`SITE_TITLE`), post/page title suffix (`SITE_SUBTITLE`), meta description (`SITE_DESCRIPTION`), footer, listing heading, and optional home-page intro (`LISTING_INTRO`, markdown shown above the post list). Posts and pages use `<title> - SITE_SUBTITLE` as the document title. Leave `LISTING_INTRO` empty to omit it.
 
 ## Commands
 
