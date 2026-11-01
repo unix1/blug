@@ -1,4 +1,4 @@
-{{listing_intro}}<h1>{{listing_heading}}</h1>
+{{if .ListingIntro}}{{.ListingIntro}}{{end}}<h1>{{.ListingHeading}}</h1>
 <ul class="post-list">
-{{posts}}
-</ul>
+{{range .Posts}}  <li><time datetime="{{.Date}}">{{.Date}}</time> <a href="{{.Slug}}/">{{.Title}}</a></li>
+{{end}}</ul>

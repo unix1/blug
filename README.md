@@ -1,16 +1,21 @@
 # blug
 
-A static blog generator. Posts are markdown folders under `public/`. `scripts/generate.js` turns them into HTML.
+A static blog generator. Posts are markdown folders under `public/`. `blug generate` turns them into HTML.
+
+Install:
+
+```bash
+go install github.com/unix1/blug@latest
+```
 
 See [SETUP.md](SETUP.md) for local preview and Cloudflare R2 hosting.
 
 ## Layout
 
 ```
+blug.yaml            # header, titles, footer, listing heading, optional home intro
 .env                 # S3 credentials for rclone (not committed)
-templates/           # header.html, footer.html, listing.html
-scripts/generate.js
-scripts/config.js    # header, listing title, subtitle, description, footer, listing heading, optional home intro
+templates/           # optional overrides for header.html, footer.html, listing.html
 public/
   index.html         # generated listing
   assets/style.css
@@ -52,20 +57,22 @@ Your content here.
 
 `title` and `type: page` are required. Link to pages the same way as posts (`/privacy-policy/`).
 
-Edit `scripts/config.js` for the site header, listing page title (`SITE_TITLE`), post/page title suffix (`SITE_SUBTITLE`), meta description (`SITE_DESCRIPTION`), footer, listing heading, and optional home-page intro (`LISTING_INTRO`, markdown shown above the post list). Posts and pages use `<title> - SITE_SUBTITLE` as the document title. Leave `LISTING_INTRO` empty to omit it.
+Edit `blug.yaml` for the site header, listing page title (`site_title`), post/page title suffix (`site_subtitle`), meta description (`site_description`), footer, listing heading, and optional home-page intro (`listing_intro`, markdown shown above the post list). Posts and pages use `<title> - site_subtitle` as the document title. Leave `listing_intro` empty to omit it.
+
+Default templates ship in the binary. Copy `header.html`, `footer.html`, or `listing.html` into a local `templates/` directory to override them. They use Go `html/template` fields such as `{{.Title}}` and `{{range .Posts}}`.
 
 ## Commands
 
 ```bash
-npm install
-npm run generate   # write listing, post, and page HTML
-npm run dev        # serve public/ at http://localhost:3000
-npm run deploy     # generate, then rclone sync public/ to destination
+blug init        # starter site in the current directory
+blug generate    # write listing, post, and page HTML
+blug serve       # serve public/ at http://localhost:3000
+blug deploy      # generate, then rclone sync public/ to destination
 ```
 
 ## Hosting
 
-This supports S3-compatible hosting, such as Cloudflare R2. Put `S3_*` values in `.env` (see `.env.example`). `npm run deploy` passes those to rclone; no `rclone.conf` is needed. Set `CACHE_CONTROL` in `.env` to control Cache-Control on uploaded objects.
+This supports S3-compatible hosting, such as Cloudflare R2. Put `S3_*` values in `.env` (see `.env.example`). `blug deploy` passes those to rclone; no `rclone.conf` is needed. Set `CACHE_CONTROL` in `.env` to control Cache-Control on uploaded objects.
 
 R2 serves exact object keys. It does not map `/hello-world/` to `hello-world/index.html`. Production needs a URL rewrite so paths ending in `/` fetch `index.html`. A cache-everything rule is optional but recommended so the CDN can cache HTML. Post listing links include a trailing slash (`hello-world/`) so relative media links resolve.
 

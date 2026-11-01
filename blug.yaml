@@ -1,0 +1,8 @@
+site_header: Blog
+site_title: Blog
+site_subtitle: Blog
+site_description: ""
+site_footer: "© Blog"
+listing_heading: Posts
+# Markdown shown above the post list on the home page. Empty string omits it.
+listing_intro: ""
