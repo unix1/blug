@@ -1,6 +1,6 @@
 # Agent notes
 
-Keep this blog generator small. Do not add extra template engines, `<base>` tags, or recursive post discovery unless asked. `html/template` is the only template language. Markdown is [goldmark v2](https://github.com/yuin/goldmark) with [goldmark-meta/v2](https://github.com/yuin/goldmark-meta) for YAML frontmatter. Site YAML is `gopkg.in/yaml.v3`. Do not add other third-party packages unless asked.
+Keep this blog generator small. Do not add extra template engines, `<base>` tags, or recursive post discovery unless asked. `html/template` is the only template language. Markdown is [goldmark v2](https://github.com/yuin/goldmark) with [goldmark-meta/v2](https://github.com/yuin/goldmark-meta) for YAML frontmatter. Site YAML is `go.yaml.in/yaml/v4`. Do not add other third-party packages unless asked.
 
 `main.go` is the CLI entry (`go install github.com/unix1/blug@latest`). Packages under `internal/` are not importable outside this module: `config` (blug.yaml), `markdown` (`Markdown` interface; goldmark is the only implementation), `generate` (post/page/listing rules; takes `markdown.Markdown`), `site` (path constants), `subcmd` (generate, serve, deploy, init). Scaffold lives in `internal/subcmd/initialize.go`.
 

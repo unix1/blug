@@ -10,7 +10,7 @@ import (
 
 	"github.com/unix1/blug/internal/config"
 	"github.com/unix1/blug/internal/markdown"
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v4"
 )
 
 type stubMarkdown struct{}
