@@ -1,7 +1,6 @@
 package generate
 
 import (
-	"embed"
 	"html/template"
 	"os"
 	"path/filepath"
@@ -76,15 +75,11 @@ func testTemplates(t *testing.T) templates {
 		}
 		return tmpl
 	}
-	article, err := template.New("article").Parse(articleSrc)
-	if err != nil {
-		t.Fatal(err)
-	}
 	return templates{
 		header:  must("header", "<title>{{.Title}}</title>\n"),
 		footer:  must("footer", "<footer>{{.SiteFooter}}</footer>\n"),
 		listing: must("listing", "{{if .ListingIntro}}{{.ListingIntro}}{{end}}<h1>{{.ListingHeading}}</h1>\n{{range .Posts}}<a href=\"{{.Slug}}/\">{{.Title}}</a>\n{{end}}"),
-		article: article,
+		article: must("article", "<article>\n<h1>{{.EntryTitle}}</h1>\n{{if .Date}}<time datetime=\"{{.Date}}\">{{.Date}}</time>\n{{end}}{{.Body}}\n</article>\n"),
 	}
 }
 
@@ -102,10 +97,11 @@ listing_intro: ""
 		"templates/header.html":  "<title>{{.Title}}</title>\n",
 		"templates/footer.html":  "<footer>{{.SiteFooter}}</footer>\n",
 		"templates/listing.html": "<h1>{{.ListingHeading}}</h1>\n{{range .Posts}}<a href=\"{{.Slug}}/\">{{.Title}}</a>\n{{end}}",
+		"templates/article.html": "<article>{{.EntryTitle}}{{.Body}}</article>\n",
 		"public/hello/index.md":  "---\ntitle: Hello\ndate: 2026-01-01\n---\n\nHi.\n",
 	})
 
-	stats, err := Run(root, embed.FS{}, stubMarkdown{})
+	stats, err := Run(root, stubMarkdown{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -120,6 +116,13 @@ listing_intro: ""
 	}
 	if _, err := os.Stat(listing); err != nil {
 		t.Fatalf("listing: %v", err)
+	}
+}
+
+func TestLoadTemplatesMissing(t *testing.T) {
+	_, err := loadTemplates(t.TempDir())
+	if err == nil || !strings.Contains(err.Error(), "templates/header.html") {
+		t.Fatalf("got %v", err)
 	}
 }
 

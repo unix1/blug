@@ -14,6 +14,7 @@ const (
 	HeaderTemplate   = "header.html"
 	FooterTemplate   = "footer.html"
 	ListingTemplate  = "listing.html"
+	ArticleTemplate  = "article.html"
 	StarterPost      = "hello-world"
 	StyleSheet       = "style.css"
 	Favicon          = "favicon.svg"

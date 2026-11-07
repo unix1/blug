@@ -11,7 +11,7 @@ import (
 )
 
 func Deploy(siteRoot string, defaults embed.FS) error {
-	if err := Generate(siteRoot, defaults); err != nil {
+	if err := Generate(siteRoot); err != nil {
 		return err
 	}
 

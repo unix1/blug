@@ -10,8 +10,7 @@ Keep this blog generator small. Do not add extra template engines, `<base>` tags
 - Posts and pages are one level deep: `public/<slug>/index.md` plus any media. Skip `public/assets/`.
 - Pages use frontmatter `type: page` (no `date`). They share the same slug/URL layout as posts but are excluded from the home listing and render without a `<time>`.
 - `blug.yaml` holds `site_header`, `site_title`, `site_subtitle`, `site_description`, `site_footer`, `listing_heading`, and `listing_intro`.
-- Default `templates/header.html` and `templates/footer.html` wrap every page. They are embedded in the binary. A site `templates/` file of the same name overrides the default. Fields are `{{.Title}}`, `{{.Description}}`, `{{.SiteHeader}}`, and `{{.SiteFooter}}`.
-- `templates/listing.html` is the home page body. Fields are `{{.ListingIntro}}`, `{{.ListingHeading}}`, and `{{range .Posts}}` (`{{.Date}}`, `{{.Slug}}`, `{{.Title}}`). `listing_intro` is markdown; empty string omits the intro. Pass goldmark output and listing intro HTML as `template.HTML`.
+- `blug init` writes `templates/`. Generate reads only those site files; there is no embed fallback. Header/footer wrap every page (`{{.Title}}`, `{{.Description}}`, `{{.SiteHeader}}`, `{{.SiteFooter}}`). `listing.html` is the home body (`{{.ListingIntro}}`, `{{.ListingHeading}}`, `{{range .Posts}}` with `{{.Date}}`, `{{.Slug}}`, `{{.Title}}`). `article.html` is the post/page body (`{{.EntryTitle}}`, `{{.Date}}`, `{{.Body}}`); empty `{{.Date}}` omits `<time>` on pages. `listing_intro` is markdown; empty string omits the intro. Pass goldmark output and listing intro HTML as `template.HTML`.
 - `blug generate` is the only build step. It reads `blug.yaml` from the current directory.
 - `.env` holds S3 provider, region, endpoint, access keys, bucket, and optional `CACHE_CONTROL`. Generate does not read it. Deploy does (`scripts/deploy.sh`, run with the site as cwd).
 

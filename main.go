@@ -28,7 +28,7 @@ func main() {
 
 	switch os.Args[1] {
 	case "generate":
-		err = subcmd.Generate(siteRoot, embedded)
+		err = subcmd.Generate(siteRoot)
 	case "serve":
 		err = subcmd.Serve(siteRoot)
 	case "deploy":

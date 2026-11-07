@@ -1,6 +1,13 @@
 # blug
 
-A static blog generator. Posts are markdown folders under `public/`. `blug generate` turns them into HTML.
+**blug** is a simple static blog and site generator.
+
+1. Write blog posts or static pages in markdown in `public/<my-page-path>/index.md`.
+2. Run `blug generate` to generate HTML from markdown.
+3. Run `blug serve` to preview your site locally.
+4. Run `blug deploy` to deploy your site to Cloudflare or another S3 compatible storage.
+
+`rclone` is required for the deploy step. You can install it via your preferred method (Linux distro, homebrew on MacOS, etc.).
 
 Install:
 
@@ -15,7 +22,7 @@ See [SETUP.md](SETUP.md) for local preview and Cloudflare R2 hosting.
 ```
 blug.yaml            # header, titles, footer, listing heading, optional home intro
 .env                 # S3 credentials for rclone (not committed)
-templates/           # optional overrides for header.html, footer.html, listing.html
+templates/           # header.html, footer.html, listing.html, article.html
 public/
   index.html         # generated listing
   assets/style.css
@@ -59,7 +66,7 @@ Your content here.
 
 Edit `blug.yaml` for the site header, listing page title (`site_title`), post/page title suffix (`site_subtitle`), meta description (`site_description`), footer, listing heading, and optional home-page intro (`listing_intro`, markdown shown above the post list). Posts and pages use `<title> - site_subtitle` as the document title. Leave `listing_intro` empty to omit it.
 
-Default templates ship in the binary. Copy `header.html`, `footer.html`, or `listing.html` into a local `templates/` directory to override them. They use Go `html/template` fields such as `{{.Title}}` and `{{range .Posts}}`.
+`blug init` writes `templates/`. Edit those files to change the HTML; generate does not fall back to copies inside the binary. They use Go `html/template` fields such as `{{.Title}}` and `{{range .Posts}}`.
 
 ## Commands
 

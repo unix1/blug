@@ -2,7 +2,6 @@ package generate
 
 import (
 	"bytes"
-	"embed"
 	"fmt"
 	"html/template"
 	"io"
@@ -56,12 +55,12 @@ type Stats struct {
 	Pages          int
 }
 
-func Run(siteRoot string, defaults embed.FS, md markdown.Markdown) (Stats, error) {
+func Run(siteRoot string, md markdown.Markdown) (Stats, error) {
 	cfg, err := config.Load(siteRoot)
 	if err != nil {
 		return Stats{}, err
 	}
-	tmpls, err := loadTemplates(siteRoot, defaults)
+	tmpls, err := loadTemplates(siteRoot)
 	if err != nil {
 		return Stats{}, err
 	}
