@@ -2,14 +2,14 @@
 
 Keep this blog generator small. Do not add extra template engines, `<base>` tags, or recursive post discovery unless asked. `html/template` is the only template language. Markdown is [goldmark v2](https://github.com/yuin/goldmark) with [goldmark-meta/v2](https://github.com/yuin/goldmark-meta) for YAML frontmatter. Site YAML is `go.yaml.in/yaml/v4`. Do not add other third-party packages unless asked.
 
-`main.go` is the CLI entry (`go install github.com/unix1/blug@latest`). `blug --version` reads `main.version` (GoReleaser `-X main.version={{.Tag}}`) or `runtime/debug.ReadBuildInfo` (`go install` is the module version; `go build` / `go test` is `(devel)`). Do not bump a version constant in source. Git tags `v*` run GoReleaser (linux/darwin amd64/arm64). Packages under `internal/` are not importable outside this module: `config` (blug.yaml), `markdown` (`Markdown` interface; goldmark is the only implementation), `generate` (post/page/listing rules; takes `markdown.Markdown`), `site` (path constants), `subcmd` (generate, serve, deploy, init). Scaffold lives in `internal/subcmd/initialize.go`.
+`main.go` is the CLI entry. Users install from GitHub Releases or `go install github.com/unix1/blug@latest`. `blug version` (also `--version`) reads `main.version` (GoReleaser `-X main.version={{.Tag}}`) or `runtime/debug.ReadBuildInfo` (`go install` is the module version; `go build` / `go test` is `(devel)`). Do not bump a version constant in source. Git tags `v*` run GoReleaser (linux/darwin amd64/arm64). Packages under `internal/` are not importable outside this module: `config` (blug.yaml), `markdown` (`Markdown` interface; goldmark is the only implementation), `generate` (post/page/listing rules; takes `markdown.Markdown`), `site` (path constants), `subcmd` (generate, serve, deploy, init). Scaffold lives in `internal/subcmd/initialize.go`.
 
 ## Layout
 
 - `public/` is the site root and the rclone/R2 upload tree.
 - Posts and pages are one level deep: `public/<slug>/index.md` plus any media. Skip `public/assets/`.
 - Pages use frontmatter `type: page` (no `date`). They share the same slug/URL layout as posts but are excluded from the home listing and render without a `<time>`.
-- `blug.yaml` holds `site_header`, `site_title`, `site_subtitle`, `site_description`, `site_footer`, and `listing_heading`.
+- `blug.yaml` holds `site_header` (chrome on every page), `site_title` (home `<title>`), `site_subtitle` (appended to post/page titles, not home), `site_description` (meta description), `site_footer` (chrome on every page), and `listing_heading` (heading above the post list).
 - `blug init` writes `templates/`. Generate reads only those site files; there is no embed fallback. Header/footer wrap every page (`{{.Title}}`, `{{.Description}}`, `{{.SiteHeader}}`, `{{.SiteFooter}}`). `listing.html` is the home body (`{{.Body}}` from `public/index.md`, `{{.ListingHeading}}`, `{{range .Posts}}` with `{{.Date}}`, `{{.Slug}}`, `{{.Title}}`). `article.html` is the post/page body (`{{.EntryTitle}}`, `{{.Date}}`, `{{.Body}}`); empty `{{.Date}}` omits `<time>` on pages. Empty `public/index.md` omits the intro. Pass goldmark output as `template.HTML`.
 - `blug generate` is the only build step. It reads `blug.yaml` from the current directory.
 - `.env` holds S3 provider, region, endpoint, access keys, bucket, and optional `CACHE_CONTROL`. Generate does not read it. Deploy does (`scripts/deploy.sh`, run with the site as cwd).
@@ -33,6 +33,8 @@ Leave media files untouched. Markdown relative links (`./photo.jpg`) must stay r
 
 ## Hosting (R2)
 
+`public/` is the static site; it can be copied anywhere. `blug deploy` is rclone to S3-compatible storage (tested on Cloudflare R2).
+
 R2 does not serve `index.html` for directory paths. Production needs a Cloudflare **URL Rewrite** on the zone (proxied custom domain, not `r2.dev`): paths ending in `/` rewrite to `concat(http.request.uri.path, "index.html")`. That includes `/`.
 
 Without the trailing slash in the browser URL, `./photo.jpg` resolves to `/photo.jpg`. Do not "fix" that with `<base href>`.
@@ -43,4 +45,4 @@ Setup steps for domain, rewrite, cache, R2 custom domain, API tokens, and `.env`
 
 ## Preview
 
-`blug serve` is stdlib `http.FileServer` on `public/` at `http://localhost:3000`.
+`blug serve` is stdlib `http.FileServer` on `public/`. It binds `:3000` first; if that port is taken it tries a few random ephemeral ports. It always prints the URL.
