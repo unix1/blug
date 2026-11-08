@@ -93,4 +93,4 @@ Full steps: [SETUP.md](SETUP.md).
 
 ## License
 
-[MIT](LICENSE)
+[Apache License 2.0](LICENSE)
