@@ -34,11 +34,12 @@ func versionString() string {
 }
 
 func usage() {
-	fmt.Fprint(os.Stderr, `blug generate   write listing, post, and page HTML
-blug serve      serve public/ at http://localhost:3000
+	fmt.Fprint(os.Stderr, `blug init       write a starter site in the current directory
+blug generate   write listing, post, and page HTML
+blug serve      serve public/ at http://localhost:3000 (or another available port)
 blug deploy     generate, then rclone sync public/ to destination
-blug init       write a starter site in the current directory
 blug version    print version
+blug help       print this help
 `)
 }
 
