@@ -15,6 +15,8 @@ Install:
 go install github.com/unix1/blug@latest
 ```
 
+Linux and macOS binaries are on the [GitHub Releases](https://github.com/unix1/blug/releases) page.
+
 See [SETUP.md](SETUP.md) for local preview and Cloudflare R2 hosting.
 
 ## Layout
@@ -78,6 +80,7 @@ blug init        # starter site in the current directory
 blug generate    # write listing, post, and page HTML
 blug serve       # serve public/ at http://localhost:3000
 blug deploy      # generate, then rclone sync public/ to destination
+blug version     # print version
 ```
 
 ## Hosting
