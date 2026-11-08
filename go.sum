@@ -1,0 +1,6 @@
+github.com/yuin/goldmark-meta/v2 v2.0.2 h1:9AYQ2yFOMvOdVNqm4xjXS0ChkDDAngNR0xjTZWbprI0=
+github.com/yuin/goldmark-meta/v2 v2.0.2/go.mod h1:pU10yCPmb8VP+PJ5s174COVs4tt1fp9SBbpHM2smg5Y=
+github.com/yuin/goldmark/v2 v2.1.13 h1:NCbQv+/Vv6UKjWFT9OORfOkMdUbayQz8lK3L18IsOI8=
+github.com/yuin/goldmark/v2 v2.1.13/go.mod h1:G6M4/qOFtfn01/o14BU1UR2Lo5N3S9Qo7xCuz/sHjGQ=
+go.yaml.in/yaml/v4 v4.0.0 h1:/LG1pNO84Z4l603j/xMn69CcS5OYhMQ/f7l2LoQUGuw=
+go.yaml.in/yaml/v4 v4.0.0/go.mod h1:aZqd9kCMsGL7AuUv/m/PvWLdg5sjJsZ4oHDEnfPPfY0=

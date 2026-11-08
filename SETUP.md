@@ -53,16 +53,21 @@ We will set up two CDN rules.
 
 ## Local development
 
-1. On [github.com/unix1/blug](https://github.com/unix1/blug), click **Use this template** and create a repository of your own.
-   - Note: `git` is not required. If you'd rather not use it, copy the files from the `main` branch wherever you like. You can download the [latest blug zip archive](https://github.com/unix1/blug/archive/refs/heads/main.zip) from GitHub and unzip in your preferred location.
-2. If you are using `git` for convenience, clone your newly created repository (if not, you can skip this step):
+1. Install [Go](https://go.dev/dl/) if you do not already have it, then install blug:
 
    ```bash
-   git clone <your-repo-url>
-   cd <your-repo>
+   go install github.com/unix1/blug@latest
    ```
 
-3. Copy `.env.example` to `.env` and fill in the R2 values:
+2. Create a directory for your site and scaffold it:
+
+   ```bash
+   mkdir my-blog
+   cd my-blog
+   blug init
+   ```
+
+3. Copy `.env.example` to `.env` if `blug init` did not write one, and fill in the R2 values:
 
    ```
    S3_PROVIDER=Cloudflare
@@ -77,28 +82,28 @@ We will set up two CDN rules.
 
    > ℹ️ Note: `max-age=5` above will only cache your objects for 5 seconds in the CDN. This value should be OK to get started while you are iterating on your site. Once you are set up, you may want to change this to a larger value. See the [CDN Cache Control](https://blug.blog/cdn-cache-control/) blog post for more details.
 
-4. Install and generate:
+4. Generate:
 
    ```bash
-   npm install && npm run generate
+   blug generate
    ```
 
 5. Preview:
 
    ```bash
-   npm run dev
+   blug serve
    ```
 
    Open http://localhost:3000 (or the URL printed in the logs).
 
-6. To iterate, add a post under `public/<slug>/index.md` and run `npm run generate` again, then refresh.
+6. To iterate, add a post under `public/<slug>/index.md` and run `blug generate` again, then refresh.
 
 ## Production deploy
 
 Install [rclone](https://rclone.org/) if you do not already have it. After Cloudflare hosting and `.env` are set:
 
 ```bash
-npm run deploy
+blug deploy
 ```
 
 That runs generate, then `rclone sync` of `public/` to the R2 bucket.
