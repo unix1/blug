@@ -20,11 +20,12 @@ See [SETUP.md](SETUP.md) for local preview and Cloudflare R2 hosting.
 ## Layout
 
 ```
-blug.yaml            # header, titles, footer, listing heading, optional home intro
+blug.yaml            # header, titles, footer, listing heading
 .env                 # S3 credentials for rclone (not committed)
 templates/           # header.html, footer.html, listing.html, article.html
 public/
-  index.html         # generated listing
+  index.md           # home page intro
+  index.html         # generated home page, including list of posts
   assets/style.css
   hello-world/
     index.md         # you write this
@@ -64,7 +65,9 @@ Your content here.
 
 `title` and `type: page` are required. Link to pages the same way as posts (`/privacy-policy/`).
 
-Edit `blug.yaml` for the site header, listing page title (`site_title`), post/page title suffix (`site_subtitle`), meta description (`site_description`), footer, listing heading, and optional home-page intro (`listing_intro`, markdown shown above the post list). Posts and pages use `<title> - site_subtitle` as the document title. Leave `listing_intro` empty to omit it.
+## Site config
+
+Edit `blug.yaml` for the site header, listing page title (`site_title`), post/page title suffix (`site_subtitle`), meta description (`site_description`), footer, and listing heading. Posts and pages use `<title> - site_subtitle` as the document title. Home intro is `public/index.md` (markdown above the post list); leave it empty to omit it.
 
 `blug init` writes `templates/`. Edit those files to change the HTML; generate does not fall back to copies inside the binary. They use Go `html/template` fields such as `{{.Title}}` and `{{range .Posts}}`.
 

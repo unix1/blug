@@ -23,6 +23,7 @@ func Init(siteRoot string, defaults embed.FS) error {
 		{filepath.ToSlash(filepath.Join(assets, site.StyleSheet)), filepath.ToSlash(filepath.Join(assets, site.StyleSheet))},
 		{filepath.ToSlash(filepath.Join(assets, site.Favicon)), filepath.ToSlash(filepath.Join(assets, site.Favicon))},
 		{starterMD, starterMD},
+		{filepath.ToSlash(filepath.Join(site.PublicDir, site.IndexMarkdown)), filepath.ToSlash(filepath.Join(site.PublicDir, site.IndexMarkdown))},
 		{filepath.ToSlash(filepath.Join(site.TemplatesDir, site.HeaderTemplate)), filepath.ToSlash(filepath.Join(site.TemplatesDir, site.HeaderTemplate))},
 		{filepath.ToSlash(filepath.Join(site.TemplatesDir, site.FooterTemplate)), filepath.ToSlash(filepath.Join(site.TemplatesDir, site.FooterTemplate))},
 		{filepath.ToSlash(filepath.Join(site.TemplatesDir, site.ListingTemplate)), filepath.ToSlash(filepath.Join(site.TemplatesDir, site.ListingTemplate))},

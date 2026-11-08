@@ -9,5 +9,6 @@ import "embed"
 //go:embed .gitignore
 //go:embed public/assets/style.css
 //go:embed public/assets/favicon.svg
+//go:embed public/index.md
 //go:embed public/hello-world/index.md
 var embedded embed.FS

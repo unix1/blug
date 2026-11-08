@@ -40,7 +40,6 @@ type pageData struct {
 	EntryTitle     string
 	Date           string
 	Body           template.HTML
-	ListingIntro   template.HTML
 	ListingHeading string
 	Posts          []listPost
 }
@@ -106,7 +105,7 @@ func Run(siteRoot string, md markdown.Markdown) (Stats, error) {
 		}
 	}
 
-	html, err := renderListing(cfg, tmpls, posts, md)
+	html, err := renderListing(cfg, tmpls, publicDir, posts, md)
 	if err != nil {
 		return stats, err
 	}
@@ -208,20 +207,25 @@ func renderStaticPage(cfg config.Config, tmpls templates, page entry) (string, e
 	return renderPage(cfg, tmpls, documentTitle(page.Title, cfg.SiteSubtitle), article)
 }
 
-func listingIntro(cfg config.Config, md markdown.Markdown) (template.HTML, error) {
-	src := strings.TrimSpace(cfg.ListingIntro)
+func listingIntro(publicDir string, md markdown.Markdown) (template.HTML, error) {
+	path := filepath.Join(publicDir, site.IndexMarkdown)
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		return "", fmt.Errorf("%s/%s: %w", site.PublicDir, site.IndexMarkdown, err)
+	}
+	src := strings.TrimSpace(string(raw))
 	if src == "" {
 		return "", nil
 	}
 	body, err := md.HTML(src)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("%s/%s: %w", site.PublicDir, site.IndexMarkdown, err)
 	}
-	return template.HTML("<section class=\"listing-intro\">\n" + string(body) + "</section>\n"), nil
+	return body, nil
 }
 
-func renderListing(cfg config.Config, tmpls templates, posts []entry, md markdown.Markdown) (string, error) {
-	intro, err := listingIntro(cfg, md)
+func renderListing(cfg config.Config, tmpls templates, publicDir string, posts []entry, md markdown.Markdown) (string, error) {
+	intro, err := listingIntro(publicDir, md)
 	if err != nil {
 		return "", err
 	}
@@ -234,7 +238,7 @@ func renderListing(cfg config.Config, tmpls templates, posts []entry, md markdow
 		}
 	}
 	listing, err := execTemplate(tmpls.listing, pageData{
-		ListingIntro:   intro,
+		Body:           intro,
 		ListingHeading: cfg.ListingHeading,
 		Posts:          items,
 	})

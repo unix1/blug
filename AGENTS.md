@@ -9,8 +9,8 @@ Keep this blog generator small. Do not add extra template engines, `<base>` tags
 - `public/` is the site root and the rclone/R2 upload tree.
 - Posts and pages are one level deep: `public/<slug>/index.md` plus any media. Skip `public/assets/`.
 - Pages use frontmatter `type: page` (no `date`). They share the same slug/URL layout as posts but are excluded from the home listing and render without a `<time>`.
-- `blug.yaml` holds `site_header`, `site_title`, `site_subtitle`, `site_description`, `site_footer`, `listing_heading`, and `listing_intro`.
-- `blug init` writes `templates/`. Generate reads only those site files; there is no embed fallback. Header/footer wrap every page (`{{.Title}}`, `{{.Description}}`, `{{.SiteHeader}}`, `{{.SiteFooter}}`). `listing.html` is the home body (`{{.ListingIntro}}`, `{{.ListingHeading}}`, `{{range .Posts}}` with `{{.Date}}`, `{{.Slug}}`, `{{.Title}}`). `article.html` is the post/page body (`{{.EntryTitle}}`, `{{.Date}}`, `{{.Body}}`); empty `{{.Date}}` omits `<time>` on pages. `listing_intro` is markdown; empty string omits the intro. Pass goldmark output and listing intro HTML as `template.HTML`.
+- `blug.yaml` holds `site_header`, `site_title`, `site_subtitle`, `site_description`, `site_footer`, and `listing_heading`.
+- `blug init` writes `templates/`. Generate reads only those site files; there is no embed fallback. Header/footer wrap every page (`{{.Title}}`, `{{.Description}}`, `{{.SiteHeader}}`, `{{.SiteFooter}}`). `listing.html` is the home body (`{{.Body}}` from `public/index.md`, `{{.ListingHeading}}`, `{{range .Posts}}` with `{{.Date}}`, `{{.Slug}}`, `{{.Title}}`). `article.html` is the post/page body (`{{.EntryTitle}}`, `{{.Date}}`, `{{.Body}}`); empty `{{.Date}}` omits `<time>` on pages. Empty `public/index.md` omits the intro. Pass goldmark output as `template.HTML`.
 - `blug generate` is the only build step. It reads `blug.yaml` from the current directory.
 - `.env` holds S3 provider, region, endpoint, access keys, bucket, and optional `CACHE_CONTROL`. Generate does not read it. Deploy does (`scripts/deploy.sh`, run with the site as cwd).
 
@@ -21,7 +21,7 @@ Keep this blog generator small. Do not add extra template engines, `<base>` tags
 1. Scan `public/*/` for `index.md`.
 2. If `type: page`, require YAML frontmatter `title` only. Otherwise require `title` and `date`.
 3. Convert markdown with goldmark v2 and write `public/<slug>/index.html`. Posts include a `<time>`; pages do not. Document titles are `<entry title> - site_subtitle`. Skip the write when the file is already up to date.
-4. Write `public/index.html` from posts only (newest date first), using `site_title` as the document title, including `listing_intro` above the post list when set.
+4. Write `public/index.html` from `public/index.md` (required; empty omits the intro) plus the post list (newest date first), using `site_title` as the document title.
 
 Leave media files untouched. Markdown relative links (`./photo.jpg`) must stay relative in the HTML.
 

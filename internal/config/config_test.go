@@ -15,7 +15,6 @@ site_subtitle: Sub
 site_description: Desc
 site_footer: Footer
 listing_heading: Posts
-listing_intro: "Hello **there**"
 `
 	if err := os.WriteFile(filepath.Join(root, "blug.yaml"), []byte(raw), 0o644); err != nil {
 		t.Fatal(err)
@@ -31,7 +30,7 @@ listing_intro: "Hello **there**"
 	if cfg.SiteDescription != "Desc" || cfg.SiteFooter != "Footer" {
 		t.Fatalf("site chrome: %+v", cfg)
 	}
-	if cfg.ListingHeading != "Posts" || cfg.ListingIntro != "Hello **there**" {
+	if cfg.ListingHeading != "Posts" {
 		t.Fatalf("listing: %+v", cfg)
 	}
 }

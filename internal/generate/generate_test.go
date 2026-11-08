@@ -78,7 +78,7 @@ func testTemplates(t *testing.T) templates {
 	return templates{
 		header:  must("header", "<title>{{.Title}}</title>\n"),
 		footer:  must("footer", "<footer>{{.SiteFooter}}</footer>\n"),
-		listing: must("listing", "{{if .ListingIntro}}{{.ListingIntro}}{{end}}<h1>{{.ListingHeading}}</h1>\n{{range .Posts}}<a href=\"{{.Slug}}/\">{{.Title}}</a>\n{{end}}"),
+		listing: must("listing", "{{if .Body}}<section class=\"listing-intro\">{{.Body}}</section>{{end}}<h1>{{.ListingHeading}}</h1>\n{{range .Posts}}<a href=\"{{.Slug}}/\">{{.Title}}</a>\n{{end}}"),
 		article: must("article", "<article>\n<h1>{{.EntryTitle}}</h1>\n{{if .Date}}<time datetime=\"{{.Date}}\">{{.Date}}</time>\n{{end}}{{.Body}}\n</article>\n"),
 	}
 }
@@ -92,12 +92,12 @@ site_subtitle: Sub
 site_description: Desc
 site_footer: Footer
 listing_heading: Posts
-listing_intro: ""
 `,
 		"templates/header.html":  "<title>{{.Title}}</title>\n",
 		"templates/footer.html":  "<footer>{{.SiteFooter}}</footer>\n",
 		"templates/listing.html": "<h1>{{.ListingHeading}}</h1>\n{{range .Posts}}<a href=\"{{.Slug}}/\">{{.Title}}</a>\n{{end}}",
 		"templates/article.html": "<article>{{.EntryTitle}}{{.Body}}</article>\n",
+		"public/index.md":        "\n",
 		"public/hello/index.md":  "---\ntitle: Hello\ndate: 2026-01-01\n---\n\nHi.\n",
 	})
 
@@ -135,6 +135,7 @@ func TestFindEntries(t *testing.T) {
 		"assets/index.md": "---\ntitle: Style notes\ndate: 2026-03-01\n---\n\nshould-skip\n",
 		"empty/keep.txt":  "no index.md\n",
 		"readme.md":       "not a directory\n",
+		"index.md":        "home intro should not be a post\n",
 	})
 
 	posts, pages, err := findEntries(publicDir, stubMarkdown{})
@@ -178,17 +179,28 @@ func TestFindEntriesMissingDate(t *testing.T) {
 }
 
 func TestListingIntro(t *testing.T) {
-	empty, err := listingIntro(config.Config{ListingIntro: "  "}, stubMarkdown{})
+	emptyDir := t.TempDir()
+	writeTree(t, emptyDir, map[string]string{"index.md": "  \n"})
+	empty, err := listingIntro(emptyDir, stubMarkdown{})
 	if err != nil || empty != "" {
 		t.Fatalf("empty intro: %q %v", empty, err)
 	}
 
-	intro, err := listingIntro(config.Config{ListingIntro: "welcome"}, stubMarkdown{})
+	introDir := t.TempDir()
+	writeTree(t, introDir, map[string]string{"index.md": "welcome"})
+	intro, err := listingIntro(introDir, stubMarkdown{})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if intro != "<section class=\"listing-intro\">\n<p>welcome</p></section>\n" {
+	if intro != "<p>welcome</p>" {
 		t.Fatalf("intro: %q", intro)
+	}
+}
+
+func TestListingIntroMissing(t *testing.T) {
+	_, err := listingIntro(t.TempDir(), stubMarkdown{})
+	if err == nil || !strings.Contains(err.Error(), "public/index.md") {
+		t.Fatalf("got %v", err)
 	}
 }
 
@@ -233,12 +245,13 @@ func TestRenderStaticPage(t *testing.T) {
 }
 
 func TestRenderListing(t *testing.T) {
+	publicDir := t.TempDir()
+	writeTree(t, publicDir, map[string]string{"index.md": "welcome"})
 	html, err := renderListing(config.Config{
 		SiteTitle:      "Site Title",
 		ListingHeading: "Posts",
-		ListingIntro:   "welcome",
 		SiteFooter:     "Footer",
-	}, testTemplates(t), []entry{
+	}, testTemplates(t), publicDir, []entry{
 		{Title: "Newer", Slug: "newer", Date: time.Date(2026, 2, 1, 0, 0, 0, 0, time.UTC)},
 		{Title: "Older", Slug: "older", Date: time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)},
 	}, stubMarkdown{})

@@ -16,7 +16,6 @@ type Config struct {
 	SiteDescription string `yaml:"site_description"`
 	SiteFooter      string `yaml:"site_footer"`
 	ListingHeading  string `yaml:"listing_heading"`
-	ListingIntro    string `yaml:"listing_intro"`
 }
 
 func Load(siteRoot string) (Config, error) {
