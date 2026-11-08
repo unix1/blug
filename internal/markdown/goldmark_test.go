@@ -59,6 +59,17 @@ func TestHTMLRelativeLink(t *testing.T) {
 	}
 }
 
+func TestHTMLRawHTML(t *testing.T) {
+	md := NewGoldmark()
+	html, err := md.HTML(`before <div class="x">raw</div> after`)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(html), `<div class="x">raw</div>`) {
+		t.Fatalf("raw HTML missing: %s", html)
+	}
+}
+
 func TestHTMLWithoutFrontmatter(t *testing.T) {
 	md := NewGoldmark()
 	html, err := md.HTML("**Hi**")

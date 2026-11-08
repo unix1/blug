@@ -23,7 +23,7 @@ func NewGoldmark() *Goldmark {
 		parser: parser.New(
 			parser.WithExtensions(meta.Parser),
 		),
-		renderer: html.New(),
+		renderer: html.New(html.WithUnsafe()),
 	}
 }
 
