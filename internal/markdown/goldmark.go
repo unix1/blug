@@ -23,13 +23,17 @@ func NewGoldmark() *Goldmark {
 		parser: parser.New(
 			parser.WithExtensions(meta.Parser),
 		),
-		renderer: html.New(html.WithUnsafe()),
+		renderer: html.New(
+			html.WithUnsafe(),
+			html.WithNodeRendererDecorator(ast.KindImage, embedImageRenderer),
+		),
 	}
 }
 
 func (g *Goldmark) Parse(src string) (Meta, template.HTML, error) {
 	source := []byte(src)
 	doc := g.parser.Parse(source)
+	markGalleries(doc, source)
 	metaData, err := documentMeta(doc)
 	if err != nil {
 		return Meta{}, "", err

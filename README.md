@@ -41,6 +41,7 @@ public/
   index.md           # home page intro you write
   index.html         # generated home page, including list of posts (don't modify this)
   assets/style.css   # make the site your own by updating CSS
+  assets/gallery.js  # thumbnail grid and the large image or video view
   hello-world/
     index.md         # you write this page or post
     index.html       # generated post (don't modify this)
@@ -63,6 +64,33 @@ This is sample text. Text can reference arbitrary media such as a [photo](./phot
 ```
 
 `title` and `date` are required. Keep media in the same directory and use relative links.
+
+## Images and video
+
+An image is the usual markdown image. A URL ending in `mp4`, `webm`, `ogv`, or `mov` is a video player. The file can sit next to the post or on a CDN.
+
+```markdown
+![North ridge](./ridge.jpg)
+
+![Walk to the creek](./walk.mp4)
+
+[![Walk to the creek](./walk.jpg)](https://cdn.example.com/walk.mp4)
+```
+
+The last line is a thumbnail: the image is the picture, and the link is the video that plays. The words in the image are the title shown under the picture. The thumbnail can be a local file or another CDN URL.
+
+A list of images, videos, and those thumbnails is a gallery. Click a picture to open it large. Click a thumbnail to play the video in that same view. Fullscreen stays the video control's own button.
+
+```markdown
+- ![North ridge](./ridge.jpg)
+- [![Walk to the creek](./walk.jpg)](https://cdn.example.com/walk.mp4)
+```
+
+A site created before this script existed needs `public/assets/gallery.js`, the gallery rules in `public/assets/style.css`, and this tag at the end of `templates/footer.html`:
+
+```html
+<script src="/assets/gallery.js" defer></script>
+```
 
 ## Write a page
 

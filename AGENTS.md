@@ -23,6 +23,8 @@ Keep this blog generator small. Do not add extra template engines, `<base>` tags
 3. Convert markdown with goldmark v2 and write `public/<slug>/index.html`. Posts include a `<time>`; pages do not. Document titles are `<entry title> - site_subtitle`. Skip the write when the file is already up to date.
 4. Write `public/index.html` from `public/index.md` (required; empty omits the intro) plus the post list (newest date first), using `site_title` as the document title.
 
+An image destination ending in `.mp4`, `.webm`, `.ogv`, or `.mov` renders as `<video controls>`. `[![alt](poster.jpg)](file.mp4)` keeps the image, links it to the video, and shows the alt text under the picture. A list made only of images, videos, and those poster links renders with `class="gallery"`. `public/assets/gallery.js` opens a viewport dialog from a content image or a poster link.
+
 Leave media files untouched. Markdown relative links (`./photo.jpg`) must stay relative in the HTML.
 
 ## URLs

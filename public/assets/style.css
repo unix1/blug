@@ -105,9 +105,93 @@ article time {
   font-size: 0.9rem;
 }
 
-img {
+img,
+video {
   max-width: 100%;
   height: auto;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 9rem), 1fr));
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0;
+}
+
+.video-label {
+  display: block;
+  margin-top: 0.25rem;
+  font-family: system-ui, sans-serif;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: var(--text);
+}
+
+.gallery > li {
+  margin: 0;
+}
+
+.gallery a {
+  display: block;
+  height: auto;
+  color: inherit;
+  text-decoration: none;
+}
+
+.gallery img,
+.gallery video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  height: auto;
+  object-fit: cover;
+}
+
+.gallery-view {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  margin: 0;
+  border: 0;
+  padding: 2.75rem 1rem 1rem;
+  background: #111;
+  color: #eee;
+}
+
+.gallery-view::backdrop {
+  background: rgba(0, 0, 0, 0.92);
+}
+
+.gallery-view button {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-family: system-ui, sans-serif;
+  font-size: 0.875rem;
+  color: #eee;
+  background: transparent;
+  border: 1px solid #666;
+  border-radius: 0.2rem;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+}
+
+.gallery-view img,
+.gallery-view video {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  max-height: calc(100vh - 4.5rem);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.gallery-view [hidden] {
+  display: none;
 }
 
 code {

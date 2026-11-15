@@ -17,6 +17,7 @@ const (
 	ArticleTemplate  = "article.html"
 	StarterPost      = "hello-world"
 	StyleSheet       = "style.css"
+	GalleryScript    = "gallery.js"
 	Favicon          = "favicon.svg"
 	DefaultServePort = 3000
 )
