@@ -94,8 +94,21 @@ article time {
 
 .post-list li {
   display: flex;
+  align-items: center;
   gap: 1rem;
   margin: 0.75rem 0;
+}
+
+.featured-image {
+  flex: 0 0 4.5rem;
+  line-height: 0;
+}
+
+.featured-image img {
+  width: 4.5rem;
+  height: 4.5rem;
+  object-fit: cover;
+  display: block;
 }
 
 .post-list time {

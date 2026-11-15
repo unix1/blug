@@ -26,6 +26,24 @@ func TestParsePost(t *testing.T) {
 	}
 }
 
+func TestParseFeaturedImage(t *testing.T) {
+	md := NewGoldmark()
+	meta, _, err := md.Parse("---\ntitle: Hello\ndate: 2026-09-05\nfeatured_image: ./cover.jpg\n---\n\nHi.\n")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if meta.FeaturedImage != "./cover.jpg" {
+		t.Fatalf("featured_image: got %q", meta.FeaturedImage)
+	}
+	plain, _, err := md.Parse("---\ntitle: Hello\ndate: 2026-09-05\n---\n\nHi.\n")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if plain.FeaturedImage != "" {
+		t.Fatalf("missing featured_image: got %q", plain.FeaturedImage)
+	}
+}
+
 func TestParsePage(t *testing.T) {
 	md := NewGoldmark()
 	meta, _, err := md.Parse("---\ntitle: About\ntype: page\n---\n\nAbout this site.\n")

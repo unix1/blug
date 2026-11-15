@@ -65,6 +65,8 @@ This is sample text. Text can reference arbitrary media such as a [photo](./phot
 
 `title` and `date` are required. Keep media in the same directory and use relative links.
 
+`featured_image` is optional. When it is set, the home list shows that picture before the title. A path is prefixed with the post slug (`./cover.jpg` becomes `slug/cover.jpg`). A full URL is left as written.
+
 ## Images and video
 
 An image is the usual markdown image. A URL ending in `mp4`, `webm`, `ogv`, or `mov` is a video player. The file can sit next to the post or on a CDN.

@@ -61,9 +61,10 @@ func documentMeta(doc ast.Node) (Meta, error) {
 		return Meta{}, err
 	}
 	return Meta{
-		Title: stringValue(raw["title"]),
-		Date:  date,
-		Type:  stringValue(raw["type"]),
+		Title:         stringValue(raw["title"]),
+		Date:          date,
+		Type:          stringValue(raw["type"]),
+		FeaturedImage: strings.TrimSpace(stringValue(raw["featured_image"])),
 	}, nil
 }
 
