@@ -15,6 +15,7 @@ import (
 //go:embed .env.example
 //go:embed .gitignore
 //go:embed public/assets/style.css
+//go:embed public/assets/gallery.js
 //go:embed public/assets/favicon.svg
 //go:embed public/index.md
 //go:embed public/hello-world/index.md

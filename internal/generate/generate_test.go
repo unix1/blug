@@ -34,9 +34,10 @@ func stubFrontmatter(src string) (markdown.Meta, string, error) {
 		return markdown.Meta{}, src, nil
 	}
 	var raw struct {
-		Title string `yaml:"title"`
-		Date  string `yaml:"date"`
-		Type  string `yaml:"type"`
+		Title         string `yaml:"title"`
+		Date          string `yaml:"date"`
+		Type          string `yaml:"type"`
+		FeaturedImage string `yaml:"featured_image"`
 	}
 	if err := yaml.Unmarshal([]byte(parts[1]), &raw); err != nil {
 		return markdown.Meta{}, "", err
@@ -49,7 +50,7 @@ func stubFrontmatter(src string) (markdown.Meta, string, error) {
 		}
 		date = parsed
 	}
-	return markdown.Meta{Title: raw.Title, Date: date, Type: raw.Type}, strings.TrimPrefix(parts[2], "\n"), nil
+	return markdown.Meta{Title: raw.Title, Date: date, Type: raw.Type, FeaturedImage: raw.FeaturedImage}, strings.TrimPrefix(parts[2], "\n"), nil
 }
 
 func writeTree(t *testing.T, root string, files map[string]string) {
@@ -266,6 +267,45 @@ func TestRenderListing(t *testing.T) {
 	}
 	if !strings.Contains(html, `<a href="newer/">Newer</a>`) || !strings.Contains(html, `<a href="older/">Older</a>`) {
 		t.Fatalf("links: %s", html)
+	}
+}
+
+func TestFeaturedSrc(t *testing.T) {
+	if got := featuredSrc("hello", "./cover.jpg"); got != "hello/cover.jpg" {
+		t.Fatalf("relative: %q", got)
+	}
+	if got := featuredSrc("hello", ""); got != "" {
+		t.Fatalf("empty: %q", got)
+	}
+	if got := featuredSrc("hello", "https://cdn.example.com/a.jpg"); got != "https://cdn.example.com/a.jpg" {
+		t.Fatalf("absolute: %q", got)
+	}
+	if got := featuredSrc("hello", "../shared/pic.jpg"); got != "hello/../shared/pic.jpg" {
+		t.Fatalf("parent: %q", got)
+	}
+}
+
+func TestRenderListingFeatured(t *testing.T) {
+	publicDir := t.TempDir()
+	writeTree(t, publicDir, map[string]string{"index.md": ""})
+	tmpls := testTemplates(t)
+	listing, err := template.New("listing").Parse(`{{range .Posts}}{{if .FeaturedImage}}<img src="{{.FeaturedImage}}" alt="">{{end}}<a href="{{.Slug}}/">{{.Title}}</a>{{end}}`)
+	if err != nil {
+		t.Fatal(err)
+	}
+	tmpls.listing = listing
+	html, err := renderListing(config.Config{SiteTitle: "Site", SiteFooter: "Footer"}, tmpls, publicDir, []entry{
+		{Title: "With", Slug: "with", FeaturedImage: "./cover.jpg", Date: time.Date(2026, 2, 1, 0, 0, 0, 0, time.UTC)},
+		{Title: "Without", Slug: "without", Date: time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)},
+	}, stubMarkdown{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(html, `<img src="with/cover.jpg" alt="">`) {
+		t.Fatalf("featured: %s", html)
+	}
+	if strings.Count(html, "<img ") != 1 {
+		t.Fatalf("featured count: %s", html)
 	}
 }
 

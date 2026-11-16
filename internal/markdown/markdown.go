@@ -6,9 +6,10 @@ import (
 )
 
 type Meta struct {
-	Title string
-	Date  time.Time
-	Type  string
+	Title         string
+	Date          time.Time
+	Type          string
+	FeaturedImage string
 }
 
 type Markdown interface {

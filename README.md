@@ -41,6 +41,7 @@ public/
   index.md           # home page intro you write
   index.html         # generated home page, including list of posts (don't modify this)
   assets/style.css   # make the site your own by updating CSS
+  assets/gallery.js  # thumbnail grid and the large image or video view
   hello-world/
     index.md         # you write this page or post
     index.html       # generated post (don't modify this)
@@ -63,6 +64,29 @@ This is sample text. Text can reference arbitrary media such as a [photo](./phot
 ```
 
 `title` and `date` are required. Keep media in the same directory and use relative links.
+
+`featured_image` is optional. When it is set, the home list shows that picture before the title. A path is prefixed with the post slug (`./cover.jpg` becomes `slug/cover.jpg`). A full URL is left as written.
+
+## Images and videos
+
+Here's how to embed a single image or video.
+
+```markdown
+![North ridge](./ridge.jpg)
+
+![Walk to the creek](./walk.mp4)
+
+[![Walk to the creek](./walk.jpg)](https://cdn.example.com/walk.mp4)
+```
+
+Note the last line where video has a thumbnail image.
+
+A list of images or videos is a gallery.
+
+```markdown
+- ![North ridge](./ridge.jpg)
+- [![Walk to the creek](./walk.jpg)](https://cdn.example.com/walk.mp4)
+```
 
 ## Write a page
 

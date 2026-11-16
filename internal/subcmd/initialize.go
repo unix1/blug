@@ -21,6 +21,7 @@ func Init(siteRoot string, defaults embed.FS) error {
 		{site.EnvExample, site.EnvFile},
 		{site.Gitignore, site.Gitignore},
 		{filepath.ToSlash(filepath.Join(assets, site.StyleSheet)), filepath.ToSlash(filepath.Join(assets, site.StyleSheet))},
+		{filepath.ToSlash(filepath.Join(assets, site.GalleryScript)), filepath.ToSlash(filepath.Join(assets, site.GalleryScript))},
 		{filepath.ToSlash(filepath.Join(assets, site.Favicon)), filepath.ToSlash(filepath.Join(assets, site.Favicon))},
 		{starterMD, starterMD},
 		{filepath.ToSlash(filepath.Join(site.PublicDir, site.IndexMarkdown)), filepath.ToSlash(filepath.Join(site.PublicDir, site.IndexMarkdown))},

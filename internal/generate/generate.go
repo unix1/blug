@@ -19,17 +19,19 @@ import (
 var skipDirs = map[string]bool{site.AssetsDir: true}
 
 type entry struct {
-	Slug   string
-	Title  string
-	Date   time.Time
-	Body   template.HTML
-	IsPage bool
+	Slug          string
+	Title         string
+	Date          time.Time
+	Body          template.HTML
+	IsPage        bool
+	FeaturedImage string
 }
 
 type listPost struct {
-	Title string
-	Date  string
-	Slug  string
+	Title         string
+	Date          string
+	Slug          string
+	FeaturedImage string
 }
 
 type pageData struct {
@@ -158,10 +160,11 @@ func findEntries(publicDir string, md markdown.Markdown) ([]entry, []entry, erro
 		}
 
 		ent := entry{
-			Slug:   item.Name(),
-			Title:  meta.Title,
-			Body:   body,
-			IsPage: meta.Type == "page",
+			Slug:          item.Name(),
+			Title:         meta.Title,
+			Body:          body,
+			IsPage:        meta.Type == "page",
+			FeaturedImage: meta.FeaturedImage,
 		}
 		if ent.IsPage {
 			pages = append(pages, ent)
@@ -182,6 +185,18 @@ func findEntries(publicDir string, md markdown.Markdown) ([]entry, []entry, erro
 
 func documentTitle(entryTitle, subtitle string) string {
 	return entryTitle + " - " + subtitle
+}
+
+func featuredSrc(slug, raw string) string {
+	raw = strings.TrimSpace(raw)
+	if raw == "" {
+		return ""
+	}
+	if strings.Contains(raw, "://") || strings.HasPrefix(raw, "//") {
+		return raw
+	}
+	raw = strings.TrimPrefix(raw, "./")
+	return slug + "/" + raw
 }
 
 func renderPost(cfg config.Config, tmpls templates, post entry) (string, error) {
@@ -232,9 +247,10 @@ func renderListing(cfg config.Config, tmpls templates, publicDir string, posts [
 	items := make([]listPost, len(posts))
 	for i, post := range posts {
 		items[i] = listPost{
-			Title: post.Title,
-			Date:  formatDate(post.Date),
-			Slug:  post.Slug,
+			Title:         post.Title,
+			Date:          formatDate(post.Date),
+			Slug:          post.Slug,
+			FeaturedImage: featuredSrc(post.Slug, post.FeaturedImage),
 		}
 	}
 	listing, err := execTemplate(tmpls.listing, pageData{
