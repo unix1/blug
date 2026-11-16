@@ -67,9 +67,9 @@ This is sample text. Text can reference arbitrary media such as a [photo](./phot
 
 `featured_image` is optional. When it is set, the home list shows that picture before the title. A path is prefixed with the post slug (`./cover.jpg` becomes `slug/cover.jpg`). A full URL is left as written.
 
-## Images and video
+## Images and videos
 
-An image is the usual markdown image. A URL ending in `mp4`, `webm`, `ogv`, or `mov` is a video player. The file can sit next to the post or on a CDN.
+Here's how to embed a single image or video.
 
 ```markdown
 ![North ridge](./ridge.jpg)
@@ -79,19 +79,13 @@ An image is the usual markdown image. A URL ending in `mp4`, `webm`, `ogv`, or `
 [![Walk to the creek](./walk.jpg)](https://cdn.example.com/walk.mp4)
 ```
 
-The last line is a thumbnail: the image is the picture, and the link is the video that plays. The words in the image are the title shown under the picture. The thumbnail can be a local file or another CDN URL.
+Note the last line where video has a thumbnail image.
 
-A list of images, videos, and those thumbnails is a gallery. Click a picture to open it large. Click a thumbnail to play the video in that same view. Fullscreen stays the video control's own button.
+A list of images or videos is a gallery.
 
 ```markdown
 - ![North ridge](./ridge.jpg)
 - [![Walk to the creek](./walk.jpg)](https://cdn.example.com/walk.mp4)
-```
-
-A site created before this script existed needs `public/assets/gallery.js`, the gallery rules in `public/assets/style.css`, and this tag at the end of `templates/footer.html`:
-
-```html
-<script src="/assets/gallery.js" defer></script>
 ```
 
 ## Write a page
