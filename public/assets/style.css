@@ -99,6 +99,13 @@ article time {
   margin: 0.75rem 0;
 }
 
+.post-list time {
+  flex: 0 0 7rem;
+  color: var(--muted);
+  font-family: system-ui, sans-serif;
+  font-size: 0.9rem;
+}
+
 .featured-image {
   flex: 0 0 4.5rem;
   line-height: 0;
@@ -109,13 +116,6 @@ article time {
   height: 4.5rem;
   object-fit: cover;
   display: block;
-}
-
-.post-list time {
-  flex: 0 0 7rem;
-  color: var(--muted);
-  font-family: system-ui, sans-serif;
-  font-size: 0.9rem;
 }
 
 img,
